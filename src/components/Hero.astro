@@ -1,0 +1,151 @@
+---
+import Section from "./Section.astro";
+import Icon from "./Icon.astro";
+import Messengers from "./Messengers.astro";
+import { MAIN, CLINIC_LINE, RFQ_MAILTO, EMAIL, tel } from "../data/site";
+const H1 = "Медичне обладнання і меблі з 1998 року — для лікарні та для дому";
+const proofs = ["з 1998 року", "власний сервісний центр", "склад в Україні", "доставка Новою поштою по Україні"];
+---
+<Section id="hero" rec="UX-R-001,UX-R-004" class="hero" label="Головне">
+  <div class="container hero__grid">
+    <h1 class="hero__h1" data-rec="SE-R-010,AU-R-001,MA-R-005">{H1}</h1>
+    <p class="hero__lead">Постачаємо закладам охорони здоров'я і приватним покупцям, вводимо в експлуатацію й обслуговуємо у власному сервісному центрі.</p>
+
+    <div class="hero__act on-dark" data-rec="UX-R-001,UX-R-002">
+      <p class="hero__act-label">Консультація і підбір обладнання</p>
+      <a class="hero__num num" href={tel(MAIN)}>{MAIN.display}</a>
+      <a class="btn btn--action hero__call" href={tel(MAIN)}>
+        <Icon name="phone" />
+        <span>Зателефонувати<span class="hero__call-num"> {MAIN.display}</span></span>
+      </a>
+      <Messengers phone={MAIN} tone="dark" />
+      <ul class="hero__extra">
+        <li><a href={tel(CLINIC_LINE)}><span class="num">{CLINIC_LINE.display}</span><span>для закладів</span></a></li>
+        <li><a href={RFQ_MAILTO} data-rec="UX-R-005"><span>{EMAIL}</span><span>запит пропозиції</span></a></li>
+      </ul>
+    </div>
+
+    <div class="hero__signs" data-rec="UX-R-004">
+      <span class="lane lane--clinic lane--hero" aria-hidden="true"></span>
+      <span class="lane lane--home lane--hero" aria-hidden="true"></span>
+      <a class="sign sign--clinic" href="#clinics">
+        <span class="sign__text">
+          <span class="sign__title">Оснащуєте заклад</span>
+          <span class="sign__desc">оснащення відділень, введення в експлуатацію, навчання персоналу</span>
+        </span>
+        <span class="sign__arrow"><Icon name="arrow" size={28} /></span>
+      </a>
+      <a class="sign sign--home" href="#home-care">
+        <span class="sign__text">
+          <span class="sign__title">Шукаєте для дому</span>
+          <span class="sign__desc">кисневі концентратори, функціональні ліжка, пульсоксиметри</span>
+        </span>
+        <span class="sign__arrow"><Icon name="arrow" size={28} /></span>
+      </a>
+    </div>
+
+    <ul class="hero__proofs" aria-label="Коротко про БІОМЕД">
+      {proofs.map((p) => <li><Icon name="arrow" size={16} /><span>{p}</span></li>)}
+    </ul>
+  </div>
+</Section>
+
+<style>
+  :global(.hero) { position: relative; padding-block: var(--s-4) var(--s-6); }
+  .hero__grid { display: grid; gap: var(--s-3); grid-template-columns: minmax(0, 1fr); }
+  .hero__h1 { font-size: var(--fs-h1); font-weight: 600; letter-spacing: -0.02em; max-width: 15ch; }
+  .hero__lead { font-size: var(--fs-17); color: var(--color-text-muted); max-width: 42ch; }
+
+  /* Action: on a phone it is the full-width yellow button + messengers; on desktop it becomes the deep-green panel. */
+  .hero__act { background: transparent; color: var(--color-text); display: grid; gap: var(--s-1); }
+  .hero__act-label, .hero__num, .hero__extra { display: none; }
+  .hero__call { width: 100%; }
+  @media (max-width: 379px) {
+    .hero__call { white-space: normal; text-align: center; padding: var(--s-1) var(--s-2); }
+    .hero__act :global(.btn--msg) { padding: 0 var(--s-1); }
+  }
+  .hero__act :global(.msg--dark .btn--msg) { color: var(--color-text); }
+  .hero__act :global(.msg--dark .btn--msg:hover) { background: var(--color-text); color: var(--color-bg); }
+  .hero__act :global(:focus-visible) { outline-color: var(--color-focus); }
+
+  .hero__signs { display: grid; gap: var(--s-1); margin-top: var(--s-1); }
+  .lane--hero { top: var(--lane-top, 55%); bottom: 0; }
+  .sign {
+    position: relative; display: flex; align-items: center; justify-content: space-between; gap: var(--s-2);
+    min-height: 92px; padding: var(--s-2) var(--s-3); border-radius: var(--radius); text-decoration: none; isolation: isolate;
+  }
+  .sign::before { content: ""; position: absolute; inset: 0; border-radius: inherit; z-index: -1; opacity: 0; transition: opacity var(--dur-fast) var(--ease-out); }
+  .sign__text { display: grid; gap: 4px; min-width: 0; }
+  .sign__title { font-family: var(--font-display); font-weight: 600; font-size: var(--fs-25); line-height: var(--lh-tight); }
+  .sign__desc { font-size: var(--fs-14); line-height: 1.4; }
+  .sign__arrow { flex: none; display: inline-grid; transition: transform var(--dur-fast) var(--ease-out); }
+  .sign--clinic { background: var(--color-brand); color: var(--color-on-brand); }
+  .sign--clinic::before { background: var(--color-board); }
+  .sign--home { background: var(--color-surface); color: var(--color-text); box-shadow: inset var(--lane) 0 0 var(--color-line-home), inset 0 0 0 1px var(--color-border); }
+  .sign--home::before { background: var(--color-brand); }
+  .sign--home .sign__desc { color: var(--color-text-muted); transition: color var(--dur-fast) var(--ease-out); }
+  .sign--home { transition: color var(--dur-fast) var(--ease-out); }
+  .sign:active { transform: scale(.98); }
+  @media (hover: hover) {
+    .sign:hover::before { opacity: 1; }
+    .sign:hover .sign__arrow { transform: translateX(6px); }
+    .sign--home:hover, .sign--home:hover .sign__desc { color: var(--color-on-brand); }
+  }
+  .sign:focus-visible::before { opacity: 1; }
+  .sign:focus-visible .sign__arrow { transform: translateX(6px); }
+  .sign--home:focus-visible, .sign--home:focus-visible .sign__desc { color: var(--color-on-brand); }
+  @media (prefers-reduced-motion: reduce) {
+    .sign:hover .sign__arrow, .sign:focus-visible .sign__arrow { transform: none; }
+    .sign:active { transform: none; }
+  }
+
+  .hero__proofs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-1) var(--s-2); font-size: var(--fs-14); }
+  .hero__proofs li { display: flex; gap: var(--s-1); align-items: baseline; }
+  .hero__proofs :global(.icon) { flex: none; color: var(--color-brand); transform: translateY(2px); }
+
+  @media (min-width: 768px) {
+    :global(.hero) { padding-block: var(--s-6); }
+    .hero__signs { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--gap); }
+    .hero__proofs { grid-template-columns: repeat(4, minmax(0, 1fr)); font-size: var(--fs-17); }
+    .hero__call-num { display: none; }
+  }
+  @media (min-width: 768px) and (max-width: 1023px) {
+    .hero__act { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: stretch; }
+  }
+
+  @media (min-width: 1024px) {
+    .hero__grid {
+      grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); row-gap: var(--s-3);
+      grid-template-areas:
+        "h1 h1 h1 h1 h1 h1 h1 act act act act act"
+        "lead lead lead lead lead lead lead act act act act act"
+        "signs signs signs signs signs signs signs act act act act act"
+        "proofs proofs proofs proofs proofs proofs proofs proofs proofs proofs proofs proofs";
+      grid-template-rows: auto auto 1fr auto;
+    }
+    .hero__h1 { grid-area: h1; max-width: none; }
+    .hero__lead { grid-area: lead; font-size: var(--fs-21); }
+    .hero__signs { grid-area: signs; align-self: end; margin-top: var(--s-2); }
+    .hero__proofs { grid-area: proofs; margin-top: var(--s-3); padding-top: var(--s-3); border-top: 1px solid var(--color-border); }
+    .hero__act {
+      grid-area: act; align-self: stretch; margin-left: var(--s-4); align-content: start; background: var(--color-board); color: var(--color-on-board);
+      padding: var(--s-4); border-radius: var(--radius); gap: var(--s-2);
+    }
+    .hero__act :global(.msg--dark .btn--msg) { color: var(--color-on-board); }
+    .hero__act :global(.msg--dark .btn--msg:hover) { background: var(--color-on-board); color: var(--color-board); }
+    .hero__act :global(:focus-visible) { outline-color: var(--color-focus-dark); }
+    .hero__act-label { display: block; color: var(--color-on-board-muted); font-size: var(--fs-17); }
+    .hero__num { display: block; font-size: var(--fs-40); line-height: 1.1; color: var(--color-on-board); text-decoration: none; letter-spacing: -0.01em; }
+    .hero__num:hover { text-decoration: underline; text-decoration-thickness: 2px; }
+    .hero__extra { display: grid; margin-top: var(--s-2); border-top: 1px solid var(--color-brand); }
+    .hero__extra a {
+      display: flex; justify-content: space-between; align-items: center; gap: var(--s-2); flex-wrap: wrap; min-height: 52px;
+      border-bottom: 1px solid var(--color-brand); color: var(--color-on-board); text-decoration: none;
+    }
+    .hero__extra a span:last-child { color: var(--color-on-board-muted); font-size: var(--fs-14); }
+    .hero__extra a:hover span:first-child { text-decoration: underline; }
+  }
+  @media (min-width: 1240px) {
+    .hero__act { padding: var(--s-4) var(--s-4) var(--s-3); }
+  }
+</style>

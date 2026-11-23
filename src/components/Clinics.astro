@@ -1,0 +1,110 @@
+---
+// «Шлях обладнання у ваш заклад»: the clinic lane becomes a route with five stops (all from products_services),
+// next to it «Що надіслати для пропозиції» as a letter template with a real mailto: (UX-R-005). No fake form.
+import Section from "./Section.astro";
+import Icon from "./Icon.astro";
+import FutureLink from "./FutureLink.astro";
+import { CLINIC_LINE, RFQ_FIELDS, RFQ_MAILTO, EMAIL, FUTURE, tel } from "../data/site";
+const stops = [
+  { t: "Демонстрація і тестування", d: "оцініть роботу обладнання до покупки й отримайте консультацію" },
+  { t: "Постачання зі складу", d: "більшість продукції — на складі в Україні, поставка по всій країні" },
+  { t: "Введення в експлуатацію", d: "введення в експлуатацію і встановлення аксесуарів — силами власного сервісного центру" },
+  { t: "Навчання персоналу", d: "навчання персоналу закладу роботі з обладнанням" },
+  { t: "Сервіс і запчастини", d: "гарантійне і післягарантійне обслуговування, власний склад запчастин" },
+];
+---
+<Section id="clinics" rec="UX-R-005" class="clinics" label="Оснащення закладів">
+  <span class="lane lane--clinic lane--full" aria-hidden="true"></span>
+  <span class="lane lane--home lane--full" aria-hidden="true"></span>
+  <div class="container">
+    <div class="head">
+      <h2>Оснащення закладів</h2>
+      <p>Для закладів охорони здоров'я: від демонстрації обладнання до сервісу після запуску.</p>
+    </div>
+
+    <ol class="route-stops">
+      {stops.map((s, i) => (
+        <li class="stop">
+          <span class="stop__dot" aria-hidden="true"></span>
+          <span class="stop__n" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
+          <h3 class="stop__t">{s.t}</h3>
+          <p class="stop__d">{s.d}</p>
+        </li>
+      ))}
+    </ol>
+
+    <div class="rfq">
+      <div class="rfq__intro">
+        <h3 class="rfq__h">Що надіслати для пропозиції</h3>
+        <p>Надішліть запит на {EMAIL}. Лист уже містить рядки, з яких менеджер зрозуміє, що потрібно вашому закладу.</p>
+        <div class="rfq__also">
+          <a class="rfq__tel" href={tel(CLINIC_LINE)}>
+            <Icon name="phone" />
+            <span class="num">{CLINIC_LINE.display}</span>
+          </a>
+          <FutureLink note={FUTURE} class="future-link--start">Прайс-лист</FutureLink>
+        </div>
+      </div>
+      <figure class="sheet" aria-label="Шаблон листа">
+        <p class="sheet__line"><span>Кому:</span> {EMAIL}</p>
+        <p class="sheet__line"><span>Тема:</span> Запит комерційної пропозиції</p>
+        <ul class="sheet__fields">
+          {RFQ_FIELDS.map((f) => <li>{f}</li>)}
+        </ul>
+        <figcaption class="sheet__act">
+          <a class="btn btn--outline sheet__btn" href={RFQ_MAILTO} data-rec="UX-R-005">
+            <Icon name="mail" />
+            <span>Написати запит</span>
+          </a>
+          <span class="sheet__hint">Відкриється ваша пошта з готовим шаблоном листа</span>
+        </figcaption>
+      </figure>
+    </div>
+  </div>
+</Section>
+
+<style>
+  :global(.clinics) { position: relative; padding-block: var(--block); }
+  .lane--full { top: 0; bottom: 0; }
+
+  .route-stops { display: grid; gap: 0; counter-reset: stop; margin-bottom: var(--s-10); }
+  .stop { position: relative; display: grid; grid-template-columns: 40px minmax(0, 1fr); column-gap: var(--s-2); padding-bottom: var(--s-3); }
+  .stop::before { content: ""; position: absolute; left: 17px; top: 8px; bottom: -8px; width: var(--lane); background: var(--color-brand); }
+  .stop:last-child::before { display: none; }
+  .stop__dot { grid-row: 1 / span 3; width: 40px; height: 40px; border-radius: 50%; background: var(--color-bg); border: var(--lane) solid var(--color-brand); position: relative; z-index: 1; }
+  .stop__n { font-size: var(--fs-14); color: var(--color-text-muted); font-variant-numeric: tabular-nums; }
+  .stop__t { font-size: var(--fs-21); }
+  .stop__d { color: var(--color-text-muted); font-size: var(--fs-17); max-width: 36ch; margin-top: 4px; }
+
+  @media (min-width: 1024px) {
+    .route-stops { grid-template-columns: repeat(5, minmax(0, 1fr)); column-gap: var(--gap); }
+    .stop { grid-template-columns: minmax(0, 1fr); padding-bottom: 0; align-content: start; }
+    .stop::before { left: 20px; right: calc(-1 * var(--gap)); top: 17px; bottom: auto; width: auto; height: var(--lane); }
+    .stop__dot { grid-row: auto; margin-bottom: var(--s-2); }
+  }
+
+  .rfq { display: grid; gap: var(--s-4); }
+  .rfq__intro { display: grid; gap: var(--s-2); align-content: start; }
+  .rfq__h { font-size: var(--fs-28); }
+  .rfq__intro p { max-width: 44ch; }
+  .rfq__also { display: flex; flex-wrap: wrap; gap: var(--s-1) var(--s-4); align-items: center; }
+  .rfq__tel { display: inline-flex; align-items: center; gap: var(--s-1); min-height: 44px; font-size: var(--fs-21); color: var(--color-text); text-decoration: none; }
+  .rfq__tel:hover { color: var(--color-brand); text-decoration: underline; }
+
+  .sheet {
+    margin: 0; background: var(--color-surface); border: 1px solid var(--color-border); border-top: var(--lane) solid var(--color-brand);
+    border-radius: var(--radius); padding: var(--s-3); display: grid; gap: var(--s-1); font-size: var(--fs-17);
+  }
+  .sheet__line { color: var(--color-text-muted); border-bottom: 1px solid var(--color-border); padding-bottom: var(--s-1); overflow-wrap: anywhere; }
+  .sheet__line span { color: var(--color-text); font-weight: 600; }
+  .sheet__fields { display: grid; margin: var(--s-1) 0 var(--s-2); }
+  .sheet__fields li { padding: .75rem 0; border-bottom: 1px dashed var(--color-border); }
+  .sheet__act { display: grid; gap: var(--s-1); justify-items: start; }
+  .sheet__hint { font-size: var(--fs-14); color: var(--color-text-muted); }
+
+  @media (min-width: 1024px) {
+    .rfq { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); }
+    .rfq__intro { grid-column: 1 / span 5; }
+    .sheet { grid-column: 7 / span 6; padding: var(--s-4); }
+  }
+</style>

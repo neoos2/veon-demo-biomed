@@ -1,0 +1,51 @@
+---
+// Light footer as a «floor plan» strip: logo + one contacts line on top, future pages as one wrapped index line,
+// then «© Біомед, Київ» (B-002: no legal entity on the site). Not a four-column link footer.
+import logo from "../assets/logo.svg";
+import FutureLink from "./FutureLink.astro";
+import { MAIN, SERVICE, EMAIL, SERVICE_EMAIL, MAP_URL, YOUTUBE, FUTURE, tel } from "../data/site";
+const pages = ["Весь каталог", "Прайс-лист", "Партнерам", "Статті", "Про компанію", "Оплата і доставка", "Повернення та обмін", "Політика конфіденційності"];
+---
+<footer class="ftr">
+  <div class="container">
+    <div class="ftr__top">
+      <a href="#top" class="ftr__logo" aria-label="БІОМЕД, на початок сторінки"><img src={logo.src} width="193" height="50" alt="БІОМЕД" /></a>
+      <ul class="ftr__contacts" aria-label="Контакти">
+        <li><span class="ftr__k">Продаж</span><a href={tel(MAIN)} class="num">{MAIN.display}</a></li>
+        <li><span class="ftr__k">Сервіс</span><a href={tel(SERVICE[0])} class="num">{SERVICE[0].display}</a></li>
+        <li><span class="ftr__k">E-mail</span><a href={`mailto:${EMAIL}`}>{EMAIL}</a></li>
+        <li><span class="ftr__k">Сервіс e-mail</span><a href={`mailto:${SERVICE_EMAIL}`}>{SERVICE_EMAIL}</a></li>
+        <li><span class="ftr__k">Адреса</span><span>03164, м. Київ, <a href={MAP_URL} target="_blank" rel="noopener">пр-т Палладіна, 25</a></span></li>
+        <li><span class="ftr__k">Відео</span><a href={YOUTUBE} target="_blank" rel="noopener">YouTube</a></li>
+      </ul>
+    </div>
+    <nav class="ftr__pages" aria-label="Сторінки сайту">
+      <ul>
+        {pages.map((p) => <li><FutureLink note={FUTURE} class="future-link--start">{p}</FutureLink></li>)}
+      </ul>
+    </nav>
+    <p class="ftr__copy">© Біомед, Київ</p>
+  </div>
+</footer>
+
+<style>
+  .ftr { background: var(--color-bg); border-top: var(--lane) solid var(--color-brand); padding-block: var(--s-6) var(--s-4); font-size: var(--fs-17); }
+  .ftr__top { display: grid; gap: var(--s-3); }
+  .ftr__logo { display: inline-block; border-radius: var(--radius); justify-self: start; }
+  .ftr__logo img { width: 150px; height: auto; }
+  .ftr__contacts { display: grid; gap: var(--s-1) var(--s-4); grid-template-columns: minmax(0, 1fr); }
+  .ftr__contacts li { display: grid; gap: 2px; }
+  .ftr__k { font-size: var(--fs-14); color: var(--color-text-muted); }
+  .ftr a { color: var(--color-text); text-decoration: none; }
+  .ftr__contacts a { display: inline-flex; align-items: center; min-height: 32px; overflow-wrap: anywhere; }
+  .ftr__contacts span > a { display: inline; }
+  .ftr a:hover { color: var(--color-brand); text-decoration: underline; }
+  .ftr__pages { margin-top: var(--s-4); padding-block: var(--s-2); border-block: 1px solid var(--color-border); }
+  .ftr__pages ul { display: flex; flex-wrap: wrap; gap: 0 var(--s-3); }
+  .ftr__copy { color: var(--color-text-muted); font-size: var(--fs-14); padding-top: var(--s-3); }
+  @media (min-width: 600px) { .ftr__contacts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 1024px) {
+    .ftr__top { grid-template-columns: minmax(0, 3fr) minmax(0, 9fr); column-gap: var(--gap); align-items: start; }
+    .ftr__contacts { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+</style>

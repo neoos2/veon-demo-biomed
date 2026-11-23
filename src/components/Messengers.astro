@@ -1,0 +1,18 @@
+---
+// Viber + WhatsApp buttons for one number (only numbers the client marks with both messengers).
+// The number itself always stays visible as text next to these buttons: Viber may do nothing on a desktop without the app.
+import Icon from "./Icon.astro";
+import { type Phone, viber, whatsapp } from "../data/site";
+interface Props { phone: Phone; tone?: "light" | "dark"; size?: "m" | "s"; rec?: string; }
+const { phone, tone = "light", size = "m", rec } = Astro.props;
+---
+<div class:list={["msg", `msg--${tone}`, `msg--${size}`]} data-rec={rec}>
+  <a class="btn btn--msg" href={viber(phone)}>
+    <Icon name="viber" />
+    <span>Viber</span><span class="visually-hidden">{phone.display}</span>
+  </a>
+  <a class="btn btn--msg" href={whatsapp(phone)} target="_blank" rel="noopener">
+    <Icon name="whatsapp" />
+    <span>WhatsApp</span><span class="visually-hidden">{phone.display}</span>
+  </a>
+</div>

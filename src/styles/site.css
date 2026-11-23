@@ -1,0 +1,106 @@
+/* BIOMED demo: shared layout, type and components. Colours and fonts only through tokens.css. */
+html { scrollbar-color: var(--color-brand) var(--color-bg); }
+body { font-size: var(--fs-17); line-height: var(--lh-text); padding-bottom: var(--bar-h); }
+h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: var(--lh-tight); margin: 0; letter-spacing: -0.01em; }
+p, ul, ol { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+a { text-decoration-thickness: 1px; text-underline-offset: 3px; }
+::selection { background: var(--color-action); color: var(--color-on-action); }
+:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; transition: none; }
+.on-dark :focus-visible { outline-color: var(--color-focus-dark); }
+.skip-link { border-radius: var(--radius); font-weight: 600; }
+
+.container { width: 100%; max-width: calc(var(--container) + 2 * var(--gutter)); margin-inline: auto; padding-inline: var(--gutter); }
+.block { padding-block: var(--block); }
+.on-dark { background: var(--color-board); color: var(--color-on-board); }
+
+/* Section heads: H2 + one supporting line, no eyebrows. */
+.head { display: grid; gap: var(--s-2); margin-bottom: var(--s-6); max-width: 46rem; }
+.head h2 { font-size: var(--fs-h2); }
+.head p { color: var(--color-text-muted); font-size: var(--fs-17); max-width: var(--measure); }
+.on-dark .head p { color: var(--color-on-board-muted); }
+
+/* Buttons */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--s-1);
+  min-height: 48px; padding: 0 var(--s-3); border-radius: var(--radius); border: 1.5px solid transparent;
+  font: 600 var(--fs-17)/1.2 var(--font-body); text-decoration: none; cursor: pointer; white-space: nowrap;
+  transition: background-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
+}
+.btn:active { transform: scale(.98); }
+.btn--action { background: var(--color-action); color: var(--color-on-action); min-height: 52px; }
+.btn--action:hover { background: var(--color-surface); }
+.btn--outline { border-color: var(--color-text); color: var(--color-text); background: transparent; }
+.btn--outline:hover { background: var(--color-text); color: var(--color-bg); }
+.on-dark .btn--outline { border-color: var(--color-on-board); color: var(--color-on-board); }
+.on-dark .btn--outline:hover { background: var(--color-on-board); color: var(--color-board); }
+.btn .icon { flex: none; }
+.btn:disabled, .btn[aria-disabled="true"] { opacity: .55; cursor: not-allowed; transform: none; }
+.future-link[aria-disabled="true"] { cursor: help; }
+
+/* Messenger pair */
+.msg { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-1); }
+.msg .btn--msg { border-color: currentColor; background: transparent; color: inherit; min-height: 52px; padding: 0 var(--s-2); }
+.msg--light .btn--msg { color: var(--color-text); }
+.msg--light .btn--msg:hover { background: var(--color-text); color: var(--color-bg); }
+.msg--dark .btn--msg { color: var(--color-on-board); }
+.msg--dark .btn--msg:hover { background: var(--color-on-board); color: var(--color-board); }
+.msg--s .btn--msg { min-height: 44px; font-size: var(--fs-14); }
+
+/* Phone as text: the number is always readable */
+.num { font-family: var(--font-body); font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* FutureLink: a page that comes with the full site. Looks like part of the system, not like an error. */
+.future-link {
+  gap: var(--s-1); color: var(--color-text-muted); text-decoration: underline dashed 1px; text-underline-offset: 4px;
+  min-height: 44px; border-radius: var(--radius);
+}
+.future-link:hover { color: var(--color-text); }
+.on-dark .future-link { color: var(--color-on-board-muted); }
+.on-dark .future-link:hover { color: var(--color-on-board); }
+.future-link__note[aria-hidden="true"] {
+  background: var(--color-text); color: var(--color-bg); font: 500 var(--fs-14)/1.2 var(--font-body);
+  padding: var(--s-1) .75rem; border-radius: var(--radius); text-decoration: none;
+}
+.future-link:active .future-link__note, .future-link:focus .future-link__note { opacity: 1; transform: translate(-50%, 0); }
+.on-dark .future-link__note[aria-hidden="true"] { background: var(--color-action); color: var(--color-on-action); }
+.future-link--start .future-link__note[aria-hidden="true"] { left: 0; transform: translate(0, -4px); }
+.future-link--start:hover .future-link__note, .future-link--start:focus .future-link__note, .future-link--start:focus-visible .future-link__note { transform: translate(0, 0); }
+
+/* Lanes: the signature floor lines (decorative). Drawn on the left margin, from the hero signboards down to service. */
+.route { position: relative; }
+.lane { position: absolute; width: var(--lane); pointer-events: none; }
+.lane--clinic { background: var(--color-brand); }
+.lane--home { background: repeating-linear-gradient(to bottom, var(--color-line-home) 0 14px, transparent 14px 24px); }
+.lane--merged { background: var(--color-line-home); }
+@media (max-width: 767px) {
+  .lane { width: 4px; left: 6px; }
+  .lane--home { display: none; }
+}
+@media (min-width: 768px) {
+  .lane--clinic { left: max(8px, calc(50% - var(--container) / 2 - 56px)); }
+  .lane--home { left: max(20px, calc(50% - var(--container) / 2 - 40px)); }
+  .lane--merged { left: max(8px, calc(50% - var(--container) / 2 - 56px)); width: calc(2 * var(--lane) + 4px); }
+}
+@media (min-width: 768px) and (max-width: 1239px) {
+  .lane { width: 4px; }
+  .lane--clinic { left: 6px; }
+  .lane--home { left: 16px; }
+  .lane--merged { left: 6px; width: 14px; }
+}
+/* Line drawing (effect 1): only with scripting and motion allowed; without them the lines are simply there. */
+@media (prefers-reduced-motion: no-preference) {
+  .js .lane { clip-path: inset(0 0 100% 0); transition: clip-path var(--dur-line) var(--ease-out); }
+  .js .is-drawn > .lane, .js .is-drawn .lane--hero { clip-path: inset(0 0 0 0); }
+}
+@media (prefers-reduced-motion: no-preference) and (max-width: 767px) {
+  .js .lane { transition-duration: 500ms; }
+}
+
+/* Reveal (effect 4): home-care items and the service photo only. */
+.js [data-reveal]:not(.is-visible) { transform: translateY(16px); }
+@media (max-width: 767px) { .js [data-reveal]:not(.is-visible) { transform: translateY(8px); } }
+[data-reveal] { transition-duration: var(--dur); }
+@media (prefers-reduced-motion: reduce) {
+  .js [data-reveal]:not(.is-visible) { transform: none; }
+}

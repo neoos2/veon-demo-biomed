@@ -1,0 +1,75 @@
+/* Hallmark · shape: wayfinding index (two lanes) · genre: modern-minimal · theme: custom · job: hire · idea: "Як вказівник у лікарні: кожен іде своєю лінією — заклад або дім — і обидві лінії приводять до сервісного центру БІОМЕД" · vibe: "clinical wayfinding, calm, direct, signage-clear"
+ * paper: #F4F6F1 · accent: #F4C542 · display: Geologica · body: IBM Plex Sans · hero: H1 left over two entry signboards (clinic / home), deep-green action panel with the phone number on the right · nav: white sticky bar, six anchors, phone as text · footer: light strip under a brand lane, logo beside one contacts grid, future pages as one wrapped index line, copyright · imagery: client photos · signature: two floor lines leave the entry signboards, run down the left margin and merge into one at the service centre
+ * axes: light-paper/geometric-sans/green+yellow · surface: absolute · posture: committed · contrast: pass · fold: pass · v2.0.0 */
+/* Hallmark · pre-emit critique: P4 H4 E4 S4 R4 V4 · weakest: imagery, client photos are small catalogue shots, so they sit in white product fields and the first screen is carried by type and the two signboards instead of a photo */
+/* Hallmark · waive 7b · tokens.css --color-surface/--color-on-brand/--color-on-board #FFFFFF · #FFFFFF is in the approved palette (concept.md veon-concept colors): the client's product photos are shot on pure white, so product fields and text on the greens stay white to match them; the page paper itself is the tinted #F4F6F1 */
+/* Hallmark · waive 23 · #1D4B26 board panel and #377E37 sign in the first screen (~14% at 1280x800) · these are the approved brand surfaces of concept.md (board = signboard, brand = clinic lane), not the accent; the accent #F4C542 is one button per screen, posture committed */
+/* Hallmark · waive 44c · hero ends at 754px of 900 at 1440 · concept.md forbids a photo in the first screen (the navigation is the hero) and caps H1 at 64px; the remaining band is the top of the dark «Покажчик напрямків» board, which shows the next step inside the fold instead of empty paper (review cycle 1, item 3) */
+/* Client design tokens from design/concept.md (veon-concept: colors, fonts; «Дизайн-система для FULL»). */
+:root {
+  /* palette */
+  --color-bg: #F4F6F1;
+  --color-surface: #FFFFFF;
+  --color-text: #0F2E1A;
+  --color-text-muted: #5B6B60;
+  --color-brand: #377E37;
+  --color-on-brand: #FFFFFF;
+  --color-board: #1D4B26;
+  --color-on-board: #FFFFFF;
+  --color-on-board-muted: #C9D8CC;
+  --color-action: #F4C542;
+  --color-on-action: #0F2E1A;
+  --color-line-home: #9CC59A;
+  --color-border: #D5DDD3;
+  --color-error: #B3261E;
+  --color-accent: var(--color-text);
+  --color-focus: #0F2E1A;
+  --color-focus-dark: #F4C542;
+
+  /* type */
+  --font-display: "Geologica", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans", system-ui, sans-serif;
+  --fs-14: 0.875rem;
+  --fs-17: 1.0625rem;
+  --fs-21: 1.3125rem;
+  --fs-25: 1.5625rem;
+  --fs-28: 1.75rem;
+  --fs-40: 2.5rem;
+  --fs-64: 4rem;
+  --fs-h1: clamp(2.25rem, 1.35rem + 2.6vw, 4rem);
+  --fs-h2: clamp(2rem, 1rem + 2.6vw, 3.25rem);
+  --fs-year: clamp(6rem, 3.6rem + 7.4vw, 10rem);
+  --lh-tight: 1.1;
+  --lh-text: 1.55;
+  --measure: 68ch;
+
+  /* spacing rhythm 8 */
+  --s-1: 0.5rem;
+  --s-2: 1rem;
+  --s-3: 1.5rem;
+  --s-4: 2rem;
+  --s-6: 3rem;
+  --s-10: 5rem;
+  --s-15: 7.5rem;
+  --block: clamp(4.5rem, 3rem + 4.2vw, 7.5rem);
+  --gutter: 1.25rem;
+  --gap: 1rem;
+  --space: var(--gutter);
+  --container: 1240px;
+
+  /* shape */
+  --radius: 4px;
+  --radius-photo: 8px;
+  --lane: 6px;
+  --header-h: 60px;
+  --bar-h: 0px;
+
+  /* motion */
+  --ease-out: cubic-bezier(.2, .7, .2, 1);
+  --dur: 500ms;
+  --dur-fast: 180ms;
+  --dur-line: 800ms;
+}
+@media (min-width: 768px) {
+  :root { --gutter: 2rem; --gap: 1.5rem; --header-h: 72px; }
+}

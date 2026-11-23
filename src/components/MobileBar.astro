@@ -1,0 +1,39 @@
+---
+// Fixed action bar on phones (UX-R-001): slides in after the first screen, hides while #contacts is on screen (effect 5).
+// Without scripting it is simply always there; the page keeps a bottom padding of the bar height.
+import Icon from "./Icon.astro";
+import { MAIN, tel, viber, whatsapp } from "../data/site";
+---
+<div class="bar on-dark" data-bar data-rec="UX-R-001,UX-R-002">
+  <a class="btn btn--action bar__call" href={tel(MAIN)}><Icon name="phone" /><span class="bar__long">Зателефонувати</span><span class="bar__short">Телефон</span><span class="visually-hidden">{MAIN.display}</span></a>
+  <a class="bar__msg" href={viber(MAIN)}><Icon name="viber" size={18} /><span>Viber</span></a>
+  <a class="bar__msg" href={whatsapp(MAIN)} target="_blank" rel="noopener"><Icon name="whatsapp" size={18} /><span>WhatsApp</span></a>
+</div>
+
+<style>
+  .bar { display: none; }
+  @media (max-width: 767px) {
+    :global(:root) { --bar-h: 68px; }
+    .bar {
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr);
+      gap: var(--s-1); padding: var(--s-1) var(--gutter); padding-bottom: max(var(--s-1), env(safe-area-inset-bottom)); min-height: var(--bar-h);
+      transition: transform 250ms var(--ease-out), visibility 0s linear 0s;
+    }
+    .bar.is-armed:not(.is-shown) { transform: translateY(100%); visibility: hidden; transition: transform 250ms var(--ease-out), visibility 0s linear 250ms; }
+    .bar__call { min-height: 52px; padding: 0 .75rem; font-size: var(--fs-14); gap: var(--s-1); }
+    .bar__short { display: none; }
+    .bar__msg {
+      display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 52px; padding: 4px;
+      border: 1.5px solid var(--color-on-board); border-radius: var(--radius);
+      color: var(--color-on-board); text-decoration: none; font-size: .75rem; line-height: 1.1; font-weight: 600; white-space: nowrap;
+    }
+    .bar__msg:active { background: var(--color-on-board); color: var(--color-board); }
+  }
+  @media (max-width: 379px) {
+    .bar__long { display: none; }
+    .bar__short { display: inline; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .bar, .bar.is-armed:not(.is-shown) { transition: none; }
+  }
+</style>

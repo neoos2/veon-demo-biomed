@@ -1,0 +1,104 @@
+---
+// «Для догляду вдома»: three large positions with the client's own product photos, no prices (UX-R-006, SP-R-006).
+import { Picture } from "astro:assets";
+import Section from "./Section.astro";
+import Messengers from "./Messengers.astro";
+import FutureLink from "./FutureLink.astro";
+import jay10 from "../assets/images/jay-10.jpg";
+import jay5 from "../assets/images/jay-5aw.jpg";
+import hbm from "../assets/images/hbm-2sm.jpg";
+import bm1000 from "../assets/images/bm1000b.jpg";
+import { MAIN, FUTURE } from "../data/site";
+const img = { formats: ["avif", "webp"] as ("avif" | "webp")[], quality: 72, loading: "lazy" as const, decoding: "async" as const };
+---
+<Section id="home-care" rec="UX-R-006,SP-R-006" class="home" label="Для догляду вдома">
+  <span class="lane lane--clinic lane--full" aria-hidden="true"></span>
+  <span class="lane lane--home lane--full" aria-hidden="true"></span>
+  <div class="container">
+    <div class="head">
+      <h2>Для догляду вдома</h2>
+      <p>Ціну і наявність підкаже менеджер у Viber чи WhatsApp або телефоном <a class="num" href={`tel:${MAIN.e164}`}>{MAIN.display}</a>.</p>
+    </div>
+
+    <div class="home__grid">
+      <article class="item item--big" data-reveal>
+        <div class="item__photos">
+          <figure class="item__ph">
+            <Picture src={jay10} alt="Кисневий концентратор БІОМЕД JAY-10 з подвійним потоком" widths={[360, 560, 760]} sizes="(min-width: 1024px) 290px, (min-width: 768px) 45vw, 50vw" {...img} />
+            <figcaption>JAY-10, подвійний потік</figcaption>
+          </figure>
+          <figure class="item__ph">
+            <Picture src={jay5} alt="Кисневий концентратор БІОМЕД JAY-5AW" widths={[360, 560, 760]} sizes="(min-width: 1024px) 290px, (min-width: 768px) 45vw, 50vw" {...img} />
+            <figcaption>JAY-5AW</figcaption>
+          </figure>
+        </div>
+        <div class="item__body">
+          <h3 class="item__t">Кисневі концентратори</h3>
+          <p class="item__note">Ціну і наявність підкаже менеджер</p>
+          <Messengers phone={MAIN} rec="UX-R-002" />
+          <FutureLink note={FUTURE} class="future-link--start">Усі кисневі концентратори</FutureLink>
+        </div>
+      </article>
+
+      <article class="item" data-reveal style="--reveal-delay:120ms">
+        <figure class="item__ph item__ph--single">
+          <Picture src={hbm} alt="Ліжко медичне БІОМЕД HBM-2SM" widths={[320, 480, 600]} sizes="(min-width: 1024px) 290px, 40vw" {...img} />
+          <figcaption>Ліжко медичне HBM-2SM</figcaption>
+        </figure>
+        <div class="item__body">
+          <h3 class="item__t">Функціональні ліжка</h3>
+          <p class="item__note">Ціну і наявність підкаже менеджер</p>
+          <Messengers phone={MAIN} size="s" />
+          <FutureLink note={FUTURE} class="future-link--start">Усі ліжка</FutureLink>
+        </div>
+      </article>
+
+      <article class="item" data-reveal style="--reveal-delay:200ms">
+        <figure class="item__ph item__ph--single">
+          <Picture src={bm1000} alt="Дитячий пульсоксиметр BM1000B" widths={[320, 480, 640]} sizes="(min-width: 1024px) 290px, 40vw" {...img} />
+          <figcaption>Пульсоксиметр BM1000B дитячий</figcaption>
+        </figure>
+        <div class="item__body">
+          <h3 class="item__t">Пульсоксиметри</h3>
+          <p class="item__note">Ціну і наявність підкаже менеджер</p>
+          <Messengers phone={MAIN} size="s" />
+          <FutureLink note={FUTURE} class="future-link--start">Усі пульсоксиметри</FutureLink>
+        </div>
+      </article>
+    </div>
+  </div>
+</Section>
+
+<style>
+  :global(.home) { position: relative; padding-block: var(--block); }
+  .lane--full { top: 0; bottom: 0; }
+  .head a { color: var(--color-text); }
+  .home__grid { display: grid; gap: var(--s-4); grid-template-columns: minmax(0, 1fr); }
+  .item { display: grid; gap: var(--s-3); align-content: start; }
+  .item__photos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-1); }
+  .item__ph { margin: 0; background: var(--color-surface); border-radius: var(--radius-photo); padding: var(--s-2); display: grid; gap: var(--s-1); }
+  .item__ph :global(img) { width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: contain; }
+  .item__ph--single :global(img) { aspect-ratio: 1; }
+  .item__ph figcaption { font-size: var(--fs-14); color: var(--color-text-muted); }
+  .item__body { display: grid; gap: var(--s-2); justify-items: start; }
+  .item__body :global(.msg) { width: 100%; max-width: 26rem; }
+  .item__t { font-size: var(--fs-28); }
+  .item__note { color: var(--color-text-muted); }
+
+  @media (max-width: 767px) { .item__ph--single { max-width: 280px; } }
+  @media (min-width: 768px) {
+    .home__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--gap); }
+    .item--big { grid-column: 1 / -1; }
+    .item:not(.item--big) { grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); align-items: start; }
+  }
+  @media (min-width: 1024px) {
+    .home__grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); }
+    .item { grid-template-rows: auto 1fr; }
+    .item--big { grid-column: 1 / span 6; }
+    .item:not(.item--big) { grid-column: span 3; grid-template-columns: minmax(0, 1fr); }
+    .item--big .item__photos { gap: var(--gap); }
+    .item__ph--single :global(img) { aspect-ratio: 3 / 4; }
+    .item__body { align-content: start; }
+    .item:not(.item--big) .item__t { font-size: var(--fs-25); }
+  }
+</style>

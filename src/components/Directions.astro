@@ -1,0 +1,103 @@
+---
+// «Покажчик напрямків»: 14 groups from client.json as a hospital-lobby directory board (UX-R-006).
+// Desktop: two columns of rows, each row is a future category page (FutureLink).
+// Phone (with scripting): accordion, all closed; without scripting every row stays open.
+import Section from "./Section.astro";
+import FutureLink from "./FutureLink.astro";
+import Icon from "./Icon.astro";
+import { DIRECTIONS, FUTURE } from "../data/site";
+---
+<Section id="directions" rec="UX-R-006" class="dirs on-dark" label="Напрямки обладнання">
+  <span class="lane lane--clinic lane--onboard" aria-hidden="true"></span>
+  <span class="lane lane--home lane--onboard" aria-hidden="true"></span>
+  <div class="container">
+    <div class="head">
+      <h2>Напрямки обладнання</h2>
+      <p>Чотирнадцять груп каталогу — знайдіть свій відділ за назвою.</p>
+    </div>
+    <ul class="dirs__list" data-accordion>
+      {DIRECTIONS.map((d) => (
+        <li class="dir">
+          <div class="dir__h">
+            <button class="dir__toggle" type="button" aria-expanded="false" aria-controls={`dir-${d.id}`} hidden>
+              <span>{d.name}</span>
+              <Icon name="chevron" size={22} class="dir__chev" />
+            </button>
+            <FutureLink note={FUTURE} class="dir__row future-link--start">
+              <span class="dir__text">
+                <span class="dir__name">{d.name}</span>
+                {d.examples && <span class="dir__ex">{d.examples}</span>}
+              </span>
+              <span class="dir__arrow"><Icon name="arrow" size={24} /></span>
+            </FutureLink>
+          </div>
+          <div class="dir__panel" id={`dir-${d.id}`}>
+            {d.examples && <p class="dir__ex">{d.examples}</p>}
+            <FutureLink note={FUTURE} class="dir__more future-link--start">Переглянути розділ<span class="visually-hidden"> {d.name}</span></FutureLink>
+          </div>
+        </li>
+      ))}
+    </ul>
+    <p class="dirs__all">
+      <FutureLink note={FUTURE} class="future-link--start">Весь каталог</FutureLink>
+    </p>
+  </div>
+</Section>
+
+<style>
+  :global(.dirs) { position: relative; padding-block: var(--block); }
+  .lane--onboard { top: 0; bottom: 0; }
+  .lane--onboard.lane--clinic { background: var(--color-line-home); }
+  .dirs__list { display: grid; grid-template-columns: minmax(0, 1fr); border-top: 1px solid var(--color-brand); }
+  .dir { border-bottom: 1px solid var(--color-brand); }
+  .dir__h { font: inherit; margin: 0; }
+  .dir__panel { display: none; }
+
+  /* Row = future page (desktop and no-script phone) */
+  .dir :global(.dir__row) {
+    position: relative; display: flex; width: 100%; justify-content: space-between; align-items: center; gap: var(--s-2);
+    min-height: 72px; padding: var(--s-2) var(--s-2) var(--s-2) 0; color: var(--color-on-board); text-decoration: none; isolation: isolate;
+  }
+  .dir :global(.dir__row)::before {
+    content: ""; position: absolute; inset: 0 calc(-1 * var(--s-2)); z-index: -1; background: var(--color-brand); border-radius: var(--radius);
+    opacity: 0; transition: opacity var(--dur-fast) var(--ease-out);
+  }
+  .dir :global(.dir__row:hover)::before, .dir :global(.dir__row:focus-visible)::before { opacity: 1; }
+  .dir :global(.dir__row:hover) .dir__arrow, .dir :global(.dir__row:focus-visible) .dir__arrow { transform: translateX(6px); }
+  .dir :global(.dir__row:active) { transform: scale(.98); }
+  .dir__text { display: grid; gap: 4px; min-width: 0; }
+  .dir__name { font-family: var(--font-display); font-weight: 500; font-size: var(--fs-21); line-height: 1.2; color: var(--color-on-board); }
+  .dir__ex { font-size: var(--fs-14); line-height: 1.45; color: var(--color-on-board-muted); }
+  .dir :global(.dir__row:hover) .dir__ex, .dir :global(.dir__row:focus-visible) .dir__ex { color: var(--color-on-board); }
+  .dir__arrow { flex: none; display: inline-grid; color: var(--color-line-home); transition: transform var(--dur-fast) var(--ease-out); }
+  .dir :global(.dir__row:hover) .dir__arrow { color: var(--color-on-board); }
+  .dirs__all { margin-top: var(--s-4); font-size: var(--fs-17); }
+
+  @media (min-width: 768px) {
+    .dir__toggle { display: none; }
+    .dirs__list { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--s-6); border-top: 0; }
+    .dir:nth-child(-n + 2) { border-top: 1px solid var(--color-brand); }
+    .dir__name { font-size: var(--fs-25); }
+  }
+
+  /* Phone accordion (effect 3): only when scripting runs */
+  @media (max-width: 767px) {
+    :global(.js) .dir__toggle:not([hidden]) {
+      display: flex; width: 100%; justify-content: space-between; align-items: center; gap: var(--s-2); min-height: 60px; padding: var(--s-1) 0;
+      background: none; border: 0; color: var(--color-on-board); text-align: left; cursor: pointer;
+      font-family: var(--font-display); font-weight: 500; font-size: var(--fs-21); line-height: 1.2;
+    }
+    :global(.js) .dir__toggle:not([hidden]) ~ :global(.dir__row) { display: none; }
+    .dir__toggle :global(.dir__chev) { flex: none; color: var(--color-line-home); transition: transform 200ms var(--ease-out); }
+    .dir__toggle[aria-expanded="true"] :global(.dir__chev) { transform: rotate(90deg); }
+    :global(.js) .dir.is-open .dir__panel { display: grid; gap: var(--s-1); padding-bottom: var(--s-2); animation: dir-in 200ms var(--ease-out); }
+    .dir__panel :global(.dir__more) { color: var(--color-on-board); }
+  }
+  @keyframes dir-in { from { opacity: 0; } to { opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) {
+    .dir :global(.dir__row:hover) .dir__arrow, .dir :global(.dir__row:focus-visible) .dir__arrow { transform: none; }
+    .dir :global(.dir__row:active) { transform: none; }
+    :global(.js) .dir.is-open .dir__panel { animation: none; }
+    .dir__toggle :global(.dir__chev) { transition: none; }
+  }
+</style>

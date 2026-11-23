@@ -1,0 +1,123 @@
+---
+import logo from "../assets/logo.svg";
+import Icon from "./Icon.astro";
+import Messengers from "./Messengers.astro";
+import { NAV, MAIN, CLINIC_LINE, EMAIL, tel } from "../data/site";
+---
+<header class="hdr" data-header>
+  <div class="container hdr__in">
+    <a class="hdr__logo" href="#top" aria-label="БІОМЕД, на початок сторінки">
+      <img src={logo.src} width="193" height="50" alt="БІОМЕД" />
+    </a>
+    <nav class="hdr__nav" aria-label="Розділи головної">
+      <ul>
+        {NAV.map((n) => <li><a href={n.href} data-nav>{n.label}</a></li>)}
+      </ul>
+    </nav>
+    <div class="hdr__phones" data-rec="UX-R-001">
+      <a class="hdr__tel num" href={tel(MAIN)}>{MAIN.display}</a>
+      <a class="hdr__tel hdr__tel--2 num" href={tel(CLINIC_LINE)}>{CLINIC_LINE.display}</a>
+    </div>
+    <a class="btn btn--outline hdr__call" href={tel(MAIN)} data-rec="UX-R-001">
+      <Icon name="phone" />
+      <span class="hdr__call-label">Зателефонувати</span>
+      <span class="visually-hidden">{MAIN.display}</span>
+    </a>
+    <button class="hdr__burger" type="button" aria-expanded="false" aria-controls="menu" data-menu-open>
+      <Icon name="menu" size={24} />
+      <span class="visually-hidden">Меню</span>
+    </button>
+  </div>
+</header>
+
+<div class="menu on-dark" id="menu" role="dialog" aria-modal="true" aria-label="Меню" hidden data-menu>
+  <div class="menu__top container">
+    <span class="menu__title">Меню</span>
+    <button class="menu__close" type="button" data-menu-close>
+      <Icon name="close" size={24} />
+      <span class="visually-hidden">Закрити меню</span>
+    </button>
+  </div>
+  <nav class="container" aria-label="Розділи головної">
+    <ul class="menu__list">
+      {NAV.map((n) => <li><a href={n.href} data-menu-link>{n.label}</a></li>)}
+    </ul>
+  </nav>
+  <div class="container menu__contacts">
+    <a class="menu__num num" href={tel(MAIN)}>{MAIN.display}</a>
+    <Messengers phone={MAIN} tone="dark" />
+    <a class="menu__line" href={tel(CLINIC_LINE)}><span class="num">{CLINIC_LINE.display}</span> для закладів</a>
+    <a class="menu__line" href={`mailto:${EMAIL}`}>{EMAIL}</a>
+  </div>
+</div>
+
+<style>
+  .hdr { position: sticky; top: 0; z-index: 40; background: var(--color-surface); border-bottom: 1px solid var(--color-border); }
+  .hdr__in { display: flex; align-items: center; gap: var(--s-2); height: var(--header-h); }
+  .hdr__logo { display: block; flex: none; margin-right: auto; border-radius: var(--radius); }
+  .hdr__logo img { width: 112px; height: auto; }
+  .hdr__nav { display: none; }
+  .hdr__phones { display: none; }
+  .hdr__call { min-height: 44px; padding: 0 var(--s-2); font-size: var(--fs-14); }
+  .hdr__burger, .menu__close {
+    display: inline-grid; place-items: center; width: 44px; height: 44px; flex: none;
+    border: 1.5px solid var(--color-text); border-radius: var(--radius); background: transparent; color: var(--color-text); cursor: pointer;
+    transition: background-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+  }
+  :global(html:not(.js)) .hdr__burger { display: none; }
+  .hdr__burger:hover { background: var(--color-text); color: var(--color-surface); }
+  @media (max-width: 419px) {
+    .hdr__in { gap: .75rem; }
+    .hdr__logo img { width: 100px; }
+    .hdr__call { padding: 0 .75rem; gap: 4px; }
+  }
+  @media (max-width: 359px) {
+    .hdr__in { gap: var(--s-1); }
+    .hdr__logo img { width: 96px; }
+    .hdr__call-label { display: none; }
+    .hdr__call { width: 44px; padding: 0; }
+  }
+  @media (min-width: 768px) {
+    .hdr__logo img { width: 150px; }
+    .hdr__phones { display: flex; gap: var(--s-2); }
+    .hdr__phones .hdr__tel--2 { display: none; }
+    .hdr__call { display: none; }
+  }
+  @media (min-width: 1024px) {
+    .hdr__in { gap: var(--s-3); }
+    .hdr__logo { margin-right: 0; }
+    .hdr__nav { display: block; margin-right: auto; }
+    .hdr__nav ul { display: flex; gap: var(--s-3); }
+    .hdr__burger { display: none; }
+  }
+  @media (min-width: 1240px) { .hdr__phones .hdr__tel--2 { display: inline-flex; } .hdr__nav ul { gap: var(--s-4); } }
+
+  .hdr__nav a {
+    position: relative; display: inline-flex; align-items: center; min-height: 44px;
+    font-size: var(--fs-17); font-weight: 500; text-decoration: none; color: var(--color-text); white-space: nowrap;
+  }
+  .hdr__nav a::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: 4px; height: 3px; background: var(--color-brand);
+    transform: scaleX(0); transform-origin: left; transition: transform var(--dur-fast) var(--ease-out);
+  }
+  .hdr__nav a:hover::after, .hdr__nav a.is-active::after { transform: scaleX(1); }
+  .hdr__tel { display: inline-flex; align-items: center; min-height: 44px; color: var(--color-text); text-decoration: none; font-size: var(--fs-17); }
+  .hdr__tel:hover { color: var(--color-brand); text-decoration: underline; }
+  .hdr__tel--2 { color: var(--color-text-muted); font-weight: 500; }
+
+  /* Full-screen mobile menu. Without scripting the panel stays hidden and the anchors in the page still work. */
+  .menu { position: fixed; inset: 0; z-index: 60; overflow-y: auto; display: flex; flex-direction: column; padding-bottom: var(--s-4); }
+  .menu[hidden] { display: none; }
+  .menu__top { display: flex; align-items: center; justify-content: space-between; height: var(--header-h); }
+  .menu__title { font-family: var(--font-display); font-size: var(--fs-21); font-weight: 600; }
+  .menu__close { border-color: var(--color-on-board); color: var(--color-on-board); }
+  .menu__close:hover { background: var(--color-on-board); color: var(--color-board); }
+  .menu__list { display: grid; margin-top: var(--s-2); }
+  .menu__list a {
+    display: flex; align-items: center; min-height: 56px; border-bottom: 1px solid var(--color-brand);
+    font-family: var(--font-display); font-size: var(--fs-28); font-weight: 500; color: var(--color-on-board); text-decoration: none;
+  }
+  .menu__contacts { display: grid; gap: var(--s-2); margin-top: auto; padding-top: var(--s-4); }
+  .menu__num { font-size: var(--fs-28); color: var(--color-on-board); text-decoration: none; }
+  .menu__line { color: var(--color-on-board-muted); min-height: 44px; display: inline-flex; align-items: center; }
+</style>

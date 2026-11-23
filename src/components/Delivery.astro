@@ -1,0 +1,48 @@
+---
+// Short band: three delivery facts side by side. Payment methods are not shown (B-009: not described by the client).
+import Section from "./Section.astro";
+import FutureLink from "./FutureLink.astro";
+import { MAP_URL, FUTURE } from "../data/site";
+---
+<Section id="delivery" class="delivery" label="Доставка">
+  <div class="container delivery__grid">
+    <h2 class="delivery__h">Доставка</h2>
+    <ul class="delivery__facts">
+      <li>
+        <h3>Новою поштою</h3>
+        <p>Поставка по всій Україні.</p>
+      </li>
+      <li>
+        <h3>Самовивіз у Києві</h3>
+        <p>03164, м. Київ, <a href={MAP_URL} target="_blank" rel="noopener">пр-т Палладіна, 25</a></p>
+      </li>
+      <li>
+        <h3>Повернення і обмін</h3>
+        <p>Відповідно до чинного законодавства.</p>
+      </li>
+    </ul>
+    <p class="delivery__more">
+      <FutureLink note={FUTURE} class="future-link--start">Оплата і доставка</FutureLink>
+      <FutureLink note={FUTURE} class="future-link--start">Повернення та обмін</FutureLink>
+    </p>
+  </div>
+</Section>
+
+<style>
+  :global(.delivery) { padding-block: var(--s-10); background: var(--color-surface); border-block: 1px solid var(--color-border); }
+  .delivery__grid { display: grid; gap: var(--s-3); }
+  .delivery__h { font-size: var(--fs-h2); }
+  .delivery__facts { display: grid; gap: var(--s-3); }
+  .delivery__facts li { display: grid; gap: var(--s-1); padding-left: var(--s-2); border-left: var(--lane) solid var(--color-line-home); }
+  .delivery__facts h3 { font-size: var(--fs-21); }
+  .delivery__facts p { color: var(--color-text-muted); }
+  .delivery__facts a { color: var(--color-text); }
+  .delivery__facts a:hover { color: var(--color-brand); }
+  .delivery__more { display: flex; flex-wrap: wrap; gap: 0 var(--s-4); }
+  @media (min-width: 1024px) {
+    .delivery__grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); align-items: start; }
+    .delivery__h { grid-column: 1 / span 3; }
+    .delivery__facts { grid-column: 4 / span 9; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: var(--gap); }
+    .delivery__more { grid-column: 4 / span 9; }
+  }
+</style>

@@ -1,0 +1,55 @@
+---
+import Base from "../layouts/Base.astro";
+import Header from "../components/Header.astro";
+import Hero from "../components/Hero.astro";
+import Directions from "../components/Directions.astro";
+import Clinics from "../components/Clinics.astro";
+import HomeCare from "../components/HomeCare.astro";
+import Service from "../components/Service.astro";
+import Delivery from "../components/Delivery.astro";
+import About from "../components/About.astro";
+import Contacts from "../components/Contacts.astro";
+import Footer from "../components/Footer.astro";
+import MobileBar from "../components/MobileBar.astro";
+import { SALES, SERVICE, EMAIL, SERVICE_EMAIL, YOUTUBE } from "../data/site";
+
+const title = "Медичне обладнання і меблі в Києві — БІОМЕД, з 1998 року";
+const description =
+  "Медичне обладнання і меблі для лікарень, клінік і догляду вдома: кисневі концентратори, функціональні ліжка. Власний сервісний центр, доставка по Україні.";
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": ["Organization", "LocalBusiness"],
+  name: "БІОМЕД",
+  foundingDate: "1998",
+  email: [EMAIL, SERVICE_EMAIL],
+  telephone: [...SALES, ...SERVICE].map((p) => p.e164),
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "пр-т Палладіна, 25",
+    addressLocality: "Київ",
+    postalCode: "03164",
+    addressCountry: "UA",
+  },
+  sameAs: [YOUTUBE],
+};
+---
+<Base lang="uk" title={title} description={description}>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(schema)} />
+  <Header slot="header" />
+  <div class="route">
+    <Hero />
+    <Directions />
+    <Clinics />
+    <HomeCare />
+    <Service />
+  </div>
+  <Delivery />
+  <About />
+  <Contacts />
+  <Fragment slot="footer">
+    <Footer />
+    <MobileBar />
+  </Fragment>
+  <script src="../scripts/site.ts"></script>
+</Base>

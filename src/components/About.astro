@@ -1,0 +1,55 @@
+---
+// «Про БІОМЕД»: 1998 as the largest element, theses instead of a wall of text (UX-R-011).
+// YouTube is only a link to the channel, no embedded player (SP-R-001); no Facebook widget (SP-R-002).
+import Section from "./Section.astro";
+import Icon from "./Icon.astro";
+import FutureLink from "./FutureLink.astro";
+import { YOUTUBE, FUTURE } from "../data/site";
+const theses = [
+  "На ринку медичного обладнання з 1998 року.",
+  "Перевірені виробники і багаторічна співпраця з ними.",
+  "Більшість продукції — на складі в Україні, без тривалого очікування.",
+  "Демонстрація і тестування обладнання перед покупкою.",
+];
+---
+<Section id="about" rec="UX-R-011" class="about" label="Про БІОМЕД">
+  <div class="container about__grid">
+    <p class="about__year" aria-hidden="true">1998</p>
+    <div class="about__body">
+      <h2 class="about__h">Про БІОМЕД</h2>
+      <ul class="about__list">
+        {theses.map((t) => <li>{t}</li>)}
+      </ul>
+      <p class="about__brands">
+        Більшість позицій — під маркою БІОМЕД. В асортименті також COMEN, MIR, MEDTECH DOTS, Masimo, TANDA, TecarPhysio, АКСИОН-БЕЛ.
+      </p>
+      <div class="about__links">
+        <a class="btn btn--outline" href={YOUTUBE} target="_blank" rel="noopener" data-rec="SP-R-001,SP-R-002">
+          <Icon name="play" />
+          <span>Канал БІОМЕД на YouTube</span>
+        </a>
+        <FutureLink note={FUTURE} class="future-link--start">Детальніше про компанію</FutureLink>
+      </div>
+    </div>
+  </div>
+</Section>
+
+<style>
+  :global(.about) { padding-block: var(--block); }
+  .about__grid { display: grid; gap: var(--s-3); }
+  .about__year {
+    font-family: var(--font-display); font-weight: 600; font-size: var(--fs-year); line-height: .85; letter-spacing: -0.04em;
+    color: var(--color-brand); font-variant-numeric: lining-nums;
+  }
+  .about__body { display: grid; gap: var(--s-3); align-content: start; }
+  .about__h { font-size: var(--fs-h2); }
+  .about__list { display: grid; border-top: 1px solid var(--color-border); }
+  .about__list li { padding: var(--s-2) 0; border-bottom: 1px solid var(--color-border); font-size: var(--fs-21); line-height: 1.35; }
+  .about__brands { color: var(--color-text-muted); max-width: var(--measure); }
+  .about__links { display: flex; flex-wrap: wrap; gap: var(--s-2) var(--s-4); align-items: center; }
+  @media (min-width: 1024px) {
+    .about__grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); }
+    .about__year { grid-column: 1 / span 5; }
+    .about__body { grid-column: 7 / span 6; }
+  }
+</style>

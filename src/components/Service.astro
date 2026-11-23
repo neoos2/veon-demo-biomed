@@ -1,0 +1,80 @@
+---
+// «Сервісний центр»: the point where both lanes merge. Dark board, service list from products_services[2],
+// service numbers and e-mail in white, deliberately without the yellow sales colour.
+import { Picture } from "astro:assets";
+import Section from "./Section.astro";
+import Icon from "./Icon.astro";
+import photo from "../assets/images/service-center.jpg";
+import { SERVICE, SERVICE_EMAIL, tel } from "../data/site";
+const list = [
+  "Гарантійне обслуговування",
+  "Післягарантійне обслуговування",
+  "Ремонт",
+  "Введення в експлуатацію",
+  "Встановлення аксесуарів",
+  "Навчання персоналу",
+  "Склад запчастин",
+];
+---
+<Section id="service" class="service on-dark" label="Сервісний центр">
+  <span class="lane lane--clinic lane--in" aria-hidden="true"></span>
+  <span class="lane lane--home lane--in" aria-hidden="true"></span>
+  <span class="lane lane--merged" aria-hidden="true"></span>
+  <div class="container service__grid">
+    <div class="head service__head">
+      <h2>Сервісний центр</h2>
+      <p>Власний авторизований сервісний центр і склад запчастин. Сюди сходяться обидва шляхи — і обладнання для закладу, і техніка для дому.</p>
+    </div>
+    <ul class="service__list">
+      {list.map((l) => <li>{l}</li>)}
+    </ul>
+    <figure class="service__ph" data-reveal>
+      <Picture src={photo} alt="Робоче місце сервісного центру БІОМЕД: діагностика плати осцилографом" widths={[365]} sizes="365px" formats={["avif", "webp"]} quality={80} loading="lazy" decoding="async" />
+      <figcaption>Сервісний центр БІОМЕД</figcaption>
+    </figure>
+    <div class="service__contacts">
+      <h3 class="service__h3">Сервіс окремо від продажу</h3>
+      <ul class="service__phones">
+        {SERVICE.map((p) => (
+          <li><a href={tel(p)}><Icon name="phone" /><span class="num">{p.display}</span></a></li>
+        ))}
+        <li><a href={`mailto:${SERVICE_EMAIL}`}><Icon name="mail" /><span>{SERVICE_EMAIL}</span></a></li>
+      </ul>
+    </div>
+  </div>
+</Section>
+
+<style>
+  :global(.service) { position: relative; padding-block: var(--block); }
+  .lane--in { top: 0; height: var(--s-10); }
+  .lane--merged { top: var(--s-10); bottom: var(--s-10); }
+  .lane--in.lane--clinic { background: var(--color-line-home); }
+  @media (max-width: 767px) { .lane--merged { width: 8px; left: 4px; } }
+
+  .service__grid { display: grid; gap: var(--s-4); grid-template-columns: minmax(0, 1fr); }
+  .service__head { margin-bottom: 0; }
+  .service__list { display: grid; border-top: 1px solid var(--color-brand); }
+  .service__list li {
+    display: flex; align-items: center; min-height: 56px; border-bottom: 1px solid var(--color-brand);
+    font-family: var(--font-display); font-size: var(--fs-21); font-weight: 500;
+  }
+  .service__ph { margin: 0; display: grid; gap: var(--s-1); max-width: 365px; }
+  .service__ph :global(img) { border-radius: var(--radius-photo); width: 100%; height: auto; }
+  .service__ph figcaption { font-size: var(--fs-14); color: var(--color-on-board-muted); }
+  .service__h3 { font-size: var(--fs-21); margin-bottom: var(--s-2); }
+  .service__phones { display: grid; gap: 0; }
+  .service__phones a {
+    display: inline-flex; align-items: center; gap: var(--s-1); min-height: 48px; color: var(--color-on-board);
+    font-size: var(--fs-21); text-decoration: none; white-space: nowrap;
+  }
+  .service__phones a:hover span { text-decoration: underline; }
+  .service__phones :global(.icon) { color: var(--color-line-home); flex: none; }
+
+  @media (min-width: 1024px) {
+    .service__grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); row-gap: var(--s-6); }
+    .service__head { grid-column: 1 / span 6; }
+    .service__ph { grid-column: 9 / span 4; grid-row: 1 / span 2; justify-self: end; align-self: start; }
+    .service__list { grid-column: 1 / span 6; }
+    .service__contacts { grid-column: 9 / span 4; align-self: end; }
+  }
+</style>
